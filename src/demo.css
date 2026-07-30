@@ -1,0 +1,23 @@
+/* ==========================================================================
+   DEMO PAGE ONLY — do NOT copy this file into your project
+   --------------------------------------------------------------------------
+   Just enough page shell to show the component: a dark ground behind it and no
+   margin around it. The component itself is styled entirely in style.css and
+   carries no global rules — that is the whole point, so nothing here is
+   allowed to be something the component needs.
+   ========================================================================== */
+
+body {
+  margin: 0;
+  color-scheme: dark;
+  background: #08080a;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: #f4f4f0;
+  color: #08080a;
+}
