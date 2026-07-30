@@ -8,80 +8,164 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Serif:ital@0;1&family=Raleway:wght@400..600&family=Manrope:wght@400..600&family=Space+Mono:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Space+Grotesk:wght@400..600&family=Raleway:wght@400..600&family=Manrope:wght@400..600&family=Space+Mono:wght@400;700&display=swap"
       rel="stylesheet"
     />
     <title>component-008</title>
   </head>
   <body>
     <!--
-      WORK — the component.
+      WORK — hover a card and a video panel opens under the cursor and follows
+      it, while the still dims and the wordmark drops away.
 
-      A grid of case-study cards. At rest a card is a still with the client
-      wordmark centred near its base. On hover the still dims, the wordmark
-      drops away, and a portrait video panel opens under the cursor and
-      follows it — trailing it, never locked to it.
-
-        __grid            the cards
-          __card            one project; --wide spans both columns
-            __link            the whole card is the link
-              __still           the resting photograph
-              __mark            client wordmark, hidden while hovering
-            __cursor          follows the pointer, never leaves the card
-              __label           project name, slides left to right inside the panel
-              __reveal          the video, clipped open from its centre
-
-      The cards are BUILT IN JS from the PROJECTS array at the top of
-      src/main.js — that array is the part you edit. This file carries only the
-      empty grid and the card template below it, which is the markup each
-      project gets poured into. Leave the grid empty; never add cards by hand.
+      Add, remove or reorder cards freely. --wide spans both columns.
+      The video src sits on data-mfa-src: main.js attaches the real src once
+      the card nears the viewport, so nothing downloads up front.
     -->
     <section class="mfa-work" aria-label="Selected work">
       <div class="mfa-work__inner">
-        <div class="mfa-work__grid" data-mfa-grid></div>
-      </div>
-
-      <!--
-        THE CARD SHAPE — cloned once per entry in PROJECTS.
-
-        Rearrange or restyle it freely; main.js only looks for the data-mfa-*
-        hooks, so anything without one is yours to change. The video carries no
-        src on purpose: main.js attaches one only when the card nears the
-        viewport, so three videos are not pulled down on page load. Once one is
-        attached, preload="metadata" gets a first frame decoded and waiting, so
-        hovering does not have to start a decode and open the panel at once.
-      -->
-      <template data-mfa-card>
-        <article class="mfa-work__card">
-          <a class="mfa-work__link" data-mfa-link>
-            <img
-              class="mfa-work__still"
-              data-mfa-still
-              alt=""
-              decoding="async"
-            />
-            <span class="mfa-work__mark" data-mfa-mark></span>
-          </a>
-
-          <!-- aria-hidden: the label only repeats the link text, and a screen
-               reader has no cursor for it to follow -->
-          <div class="mfa-work__cursor" data-mfa-cursor aria-hidden="true">
-            <span class="mfa-work__label-clip">
-              <span class="mfa-work__label" data-mfa-label></span>
-            </span>
-            <div class="mfa-work__reveal" data-mfa-reveal>
-              <video
-                class="mfa-work__video"
-                data-mfa-video
-                muted
-                loop
-                playsinline
-                preload="metadata"
-              ></video>
+        <div class="mfa-work__grid">
+          <article class="mfa-work__card mfa-work__card--wide">
+            <a class="mfa-work__link" href="#">
+              <img
+                class="mfa-work__still"
+                src="/assets/work-img-1.jpg"
+                alt=""
+                fetchpriority="high"
+                decoding="async"
+              />
+              <span class="mfa-work__mark">Iris</span>
+            </a>
+            <div class="mfa-work__cursor" aria-hidden="true">
+              <span class="mfa-work__label-clip">
+                <span class="mfa-work__label">Case Study — Iris</span>
+              </span>
+              <div class="mfa-work__reveal">
+                <video
+                  class="mfa-work__video"
+                  data-mfa-src="https://assets.mixkit.co/videos/39875/39875-720.mp4"
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                ></video>
+              </div>
             </div>
-          </div>
-        </article>
-      </template>
+          </article>
+
+          <article class="mfa-work__card">
+            <a class="mfa-work__link" href="#">
+              <img
+                class="mfa-work__still"
+                src="/assets/work-img-2.jpg"
+                alt=""
+                fetchpriority="low"
+                decoding="async"
+              />
+              <span class="mfa-work__mark">Lumen</span>
+            </a>
+            <div class="mfa-work__cursor" aria-hidden="true">
+              <span class="mfa-work__label-clip">
+                <span class="mfa-work__label">Case Study — Lumen</span>
+              </span>
+              <div class="mfa-work__reveal">
+                <video
+                  class="mfa-work__video"
+                  data-mfa-src="https://assets.mixkit.co/videos/4058/4058-720.mp4"
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                ></video>
+              </div>
+            </div>
+          </article>
+
+          <article class="mfa-work__card">
+            <a class="mfa-work__link" href="#">
+              <img
+                class="mfa-work__still"
+                src="/assets/work-img-3.jpg"
+                alt=""
+                fetchpriority="low"
+                decoding="async"
+              />
+              <span class="mfa-work__mark">Aurora</span>
+            </a>
+            <div class="mfa-work__cursor" aria-hidden="true">
+              <span class="mfa-work__label-clip">
+                <span class="mfa-work__label">Case Study — Aurora Beauty</span>
+              </span>
+              <div class="mfa-work__reveal">
+                <video
+                  class="mfa-work__video"
+                  data-mfa-src="https://assets.mixkit.co/videos/39874/39874-720.mp4"
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                ></video>
+              </div>
+            </div>
+          </article>
+
+          <article class="mfa-work__card">
+            <a class="mfa-work__link" href="#">
+              <img
+                class="mfa-work__still"
+                src="/assets/work-img-4.jpg"
+                alt=""
+                fetchpriority="low"
+                decoding="async"
+              />
+              <span class="mfa-work__mark">Opal</span>
+            </a>
+            <div class="mfa-work__cursor" aria-hidden="true">
+              <span class="mfa-work__label-clip">
+                <span class="mfa-work__label">Case Study — Opal</span>
+              </span>
+              <div class="mfa-work__reveal">
+                <video
+                  class="mfa-work__video"
+                  data-mfa-src="https://assets.mixkit.co/videos/39879/39879-720.mp4"
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                ></video>
+              </div>
+            </div>
+          </article>
+
+          <article class="mfa-work__card">
+            <a class="mfa-work__link" href="#">
+              <img
+                class="mfa-work__still"
+                src="/assets/work-img-5.jpg"
+                alt=""
+                fetchpriority="low"
+                decoding="async"
+              />
+              <span class="mfa-work__mark">Vesper</span>
+            </a>
+            <div class="mfa-work__cursor" aria-hidden="true">
+              <span class="mfa-work__label-clip">
+                <span class="mfa-work__label">Case Study — Vesper</span>
+              </span>
+              <div class="mfa-work__reveal">
+                <video
+                  class="mfa-work__video"
+                  data-mfa-src="https://assets.mixkit.co/videos/50453/50453-720.mp4"
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                ></video>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
     </section>
 
     <script type="module" src="/src/main.js"></script>

@@ -43,22 +43,30 @@
      window changes, and capped so it stops growing on very wide screens. */
   --mfa-panel-w: min(21vw, 504px);
   --mfa-panel-ratio: 303 / 389; /* portrait; landscape footage gets centre-cropped */
-  --mfa-panel-gap: 10px; /* between the label and the video */
+  --mfa-panel-gap: 3px; /* between the label and the video */
   /* how small the video's window is shut down to — see the note on __reveal.
      Keep it in step with CONFIG.CLOSE_TO in main.js. */
   --mfa-panel-shut: 0.14;
 
-  --mfa-label-size: clamp(14px, 1.15vw, 21px);
+  --mfa-label-size: clamp(10px, 0.83vw, 14px);
+  --mfa-label-track: 0.14em; /* uppercase needs the air; lowercase would not */
   --mfa-mark-size: clamp(18px, 2.4vw, 44px);
   --mfa-mark-bottom: 10%; /* how far the wordmark sits above the card's base */
+  /* Wordmarks are white and land wherever the photograph happens to be light —
+     a pale studio backdrop leaves them almost invisible. This is a soft dark
+     glow behind the type, not a bar across the card: on a dark photo it is
+     imperceptible, on a light one it is the only thing holding the letters up.
+     Set to `none` if every image you use is dark. */
+  --mfa-mark-shadow: 0 0 28px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.4);
 
   --mfa-display: "Bricolage Grotesque", ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Helvetica, Arial, sans-serif;
-  /* The cursor label. A serif italic against the heavy sans wordmark is the
-     whole point of using a second face here — swap this one line to change it,
-     and remember to change the <link> in index.html to match. */
-  --mfa-label-font: "Instrument Serif", ui-serif, Georgia, "Times New Roman",
-    serif;
+  /* The cursor label. Set apart from the wordmark by treatment rather than by
+     contrast — same case, far smaller, tracked wide, so it reads as a system
+     label next to the wordmark's mass. Swap this one line to change the face,
+     and change the <link> in index.html to match. */
+  --mfa-label-font: "Space Grotesk", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Helvetica, Arial, sans-serif;
 
   display: block;
   padding: var(--mfa-pad);
@@ -149,6 +157,7 @@
   line-height: 1;
   white-space: nowrap;
   text-transform: uppercase;
+  text-shadow: var(--mfa-mark-shadow);
   transition: opacity var(--mfa-dim-time) var(--mfa-dim-ease);
 }
 
@@ -187,10 +196,10 @@
   display: inline-block;
   opacity: 0;
   font-family: var(--mfa-label-font);
-  font-style: italic;
   font-size: var(--mfa-label-size);
-  /* a serif italic sets its own rhythm — tracking it out only breaks it */
-  letter-spacing: 0;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--mfa-label-track);
   line-height: 1.2;
   white-space: nowrap;
   will-change: transform;
