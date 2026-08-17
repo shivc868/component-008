@@ -1,11 +1,10 @@
 import "./style.css";
-import "./demo.css"; // demo page only, don't copy this one
+import "./demo.css";
 import "lenis/dist/lenis.css";
 import gsap from "gsap";
 import Lenis from "lenis";
 
-// Set to false if the host site runs its own scrolling. If it already runs
-// Lenis, that instance is reused instead of starting a second one.
+// Set to false if the host site runs its own scrolling.
 const SMOOTH_SCROLL = true;
 
 if (SMOOTH_SCROLL && !window.lenis) {
@@ -16,12 +15,12 @@ if (SMOOTH_SCROLL && !window.lenis) {
 }
 
 const CONFIG = {
-  FOLLOW: 0.7, // seconds for the panel to catch the cursor
+  FOLLOW: 0.7,
   FOLLOW_EASE: "power3",
-  LABEL_FOLLOW: 0.9, // the label trails the panel slightly
+  LABEL_FOLLOW: 0.9,
   BOUND: 0.45, // panel centre stays within this share of the card
-  OPEN_FROM: 0.2, // window scale at the start of the open
-  CLOSE_TO: 0.14, // and what it shuts back to. Keep --mfa-panel-shut in step
+  OPEN_FROM: 0.2,
+  CLOSE_TO: 0.14, // keep --mfa-panel-shut in step
   OPEN: 0.75,
   OPEN_EASE: "power2.out",
   CLOSE: 0.45,
@@ -30,7 +29,7 @@ const CONFIG = {
   LABEL_IN: 0.45,
   LABEL_EASE: "power3.out",
   LABEL_OUT: 0.4,
-  PRELOAD_MARGIN: "100px", // how early a video src gets attached
+  PRELOAD_MARGIN: "100px",
 };
 
 (function mfaWork() {
@@ -50,7 +49,6 @@ const CONFIG = {
     if (!video.src) video.src = video.dataset.mfaSrc;
   }
 
-  // Nothing downloads until its card is near the viewport.
   const loader = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
@@ -97,7 +95,6 @@ const CONFIG = {
       gsap.set(video, { scale: 1 / aperture.open });
     }
 
-    // One tween per axis, re-aimed on each move rather than recreated.
     const xTo = gsap.quickTo(cursor, "x", {
       duration: CONFIG.FOLLOW,
       ease: CONFIG.FOLLOW_EASE,
@@ -111,8 +108,7 @@ const CONFIG = {
       ease: CONFIG.FOLLOW_EASE,
     });
 
-    // Kill by property. A blanket kill would take the quickTo tweens with it
-    // and the follow would never move again.
+    // Kill by property — a blanket kill would take the quickTo tweens with it.
     function stopTweens() {
       gsap.killTweensOf(label, "opacity,yPercent");
       gsap.killTweensOf(reveal, "opacity");
@@ -123,7 +119,7 @@ const CONFIG = {
       const to = positionFor(event, item);
 
       attachSrc(video);
-      video.play().catch(() => {}); // a refused autoplay still shows frame one
+      video.play().catch(() => {});
 
       stopTweens();
       gsap.set(cursor, { xPercent: -50, yPercent: -50 });
@@ -133,7 +129,6 @@ const CONFIG = {
       yTo(to.y, to.y);
       labelTo(to.labelX, to.labelX);
 
-      // -110 not -100, so nothing peeks over the top of the clip
       gsap.set(label, { opacity: 1, yPercent: -110 });
       gsap.set(reveal, { opacity: 0 });
       aperture.open = CONFIG.OPEN_FROM;
@@ -202,7 +197,6 @@ const CONFIG = {
     };
   }
 
-  // Only wired where there is a real pointer and no reduced-motion request.
   const mm = gsap.matchMedia();
 
   mm.add(
