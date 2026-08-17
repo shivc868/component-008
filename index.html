@@ -14,14 +14,8 @@
     <title>component-008</title>
   </head>
   <body>
-    <!--
-      WORK — hover a card and a video panel opens under the cursor and follows
-      it, while the still dims and the wordmark drops away.
-
-      Add, remove or reorder cards freely. --wide spans both columns.
-      The video src sits on data-mfa-src: main.js attaches the real src once
-      the card nears the viewport, so nothing downloads up front.
-    -->
+    <!-- Cards can be added, removed or reordered. --wide spans both columns.
+         main.js swaps data-mfa-src onto src once a card nears the viewport. -->
     <section class="mfa-work" aria-label="Selected work">
       <div class="mfa-work__inner">
         <div class="mfa-work__grid">

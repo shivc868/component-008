@@ -1,11 +1,6 @@
-/* ==========================================================================
-   WORK — case-study grid with a cursor-following video reveal
-   --------------------------------------------------------------------------
-   Everything is scoped under .mfa-work: no global resets, no :root variables,
-   no generic class names. Safe to paste into any host page.
-   main.js owns the cursor panel's transform and its open/close; this file owns
-   looks, geometry, and every resting state the panel animates away from.
-   ========================================================================== */
+/* WORK — case-study grid with a cursor-following video reveal.
+   Everything is scoped under .mfa-work. main.js owns the panel's transform and
+   its open/close; this file owns looks, geometry and the resting states. */
 
 .mfa-work,
 .mfa-work *,
@@ -15,56 +10,37 @@
 }
 
 .mfa-work {
-  --mfa-bg: #08080a; /* near-black ground */
-  --mfa-ink: #f4f4f0; /* off-white, the wordmarks and labels */
+  --mfa-bg: #08080a;
+  --mfa-ink: #f4f4f0;
 
-  /* The dim is a black sheet laid over the still, faded in by OPACITY — not a
-     brightness() filter on the photo. A filter has to repaint the whole image
-     every frame, which on a 1920px still is enough work to make the fade step
-     visibly; opacity is composited and costs nothing. */
-  --mfa-dim: 0.55; /* how opaque that sheet goes — 0 is no dim at all */
+  /* the dim is a black sheet faded by opacity, not a brightness() filter */
+  --mfa-dim: 0.55;
   --mfa-dim-time: 420ms;
   --mfa-dim-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
-  --mfa-gap: clamp(12px, 1.7vw, 32px); /* between cards */
-  --mfa-pad: clamp(20px, 3vw, 64px); /* around the whole grid */
-  --mfa-radius: 0px; /* square corners; raise to round the cards */
-  --mfa-max: 1920px; /* the grid stops widening past this */
+  --mfa-gap: clamp(12px, 1.7vw, 32px);
+  --mfa-pad: clamp(20px, 3vw, 64px);
+  --mfa-radius: 0px;
+  --mfa-max: 1920px;
 
-  /* Card proportions. Rows are sized from these rather than from the photos,
-     so two cards side by side always agree on a height and swapping a photo
-     can never change the layout. */
-  --mfa-ratio: 1 / 1; /* a half-width card — square, so the row stands tall
-                         against the wide one above it */
-  --mfa-ratio-wide: 16 / 9; /* one that spans both columns */
+  /* rows are sized from these, not from the photos */
+  --mfa-ratio: 1 / 1;
+  --mfa-ratio-wide: 16 / 9;
 
-  /* ----- the cursor panel -----
-     Width is viewport-relative so the panel keeps its share of the card as the
-     window changes, and capped so it stops growing on very wide screens. */
   --mfa-panel-w: min(21vw, 504px);
-  --mfa-panel-ratio: 303 / 389; /* portrait; landscape footage gets centre-cropped */
-  --mfa-panel-gap: 3px; /* between the label and the video */
-  /* how small the video's window is shut down to — see the note on __reveal.
-     Keep it in step with CONFIG.CLOSE_TO in main.js. */
-  --mfa-panel-shut: 0.14;
+  --mfa-panel-ratio: 303 / 389;
+  --mfa-panel-gap: 3px;
+  --mfa-panel-shut: 0.14; /* keep in step with CONFIG.CLOSE_TO in main.js */
 
   --mfa-label-size: clamp(10px, 0.83vw, 14px);
-  --mfa-label-track: 0.14em; /* uppercase needs the air; lowercase would not */
+  --mfa-label-track: 0.14em;
   --mfa-mark-size: clamp(18px, 2.4vw, 44px);
-  --mfa-mark-bottom: 10%; /* how far the wordmark sits above the card's base */
-  /* Wordmarks are white and land wherever the photograph happens to be light —
-     a pale studio backdrop leaves them almost invisible. This is a soft dark
-     glow behind the type, not a bar across the card: on a dark photo it is
-     imperceptible, on a light one it is the only thing holding the letters up.
-     Set to `none` if every image you use is dark. */
+  --mfa-mark-bottom: 10%;
+  /* holds white wordmarks up over light photos; set to `none` if all are dark */
   --mfa-mark-shadow: 0 0 28px rgba(0, 0, 0, 0.55), 0 1px 3px rgba(0, 0, 0, 0.4);
 
   --mfa-display: "Bricolage Grotesque", ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Helvetica, Arial, sans-serif;
-  /* The cursor label. Set apart from the wordmark by treatment rather than by
-     contrast — same case, far smaller, tracked wide, so it reads as a system
-     label next to the wordmark's mass. Swap this one line to change the face,
-     and change the <link> in index.html to match. */
   --mfa-label-font: "Space Grotesk", ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Helvetica, Arial, sans-serif;
 
@@ -73,9 +49,7 @@
   background: var(--mfa-bg);
   color: var(--mfa-ink);
   font-family: var(--mfa-display);
-  /* internal z-indexes stay inside this stacking context — they can never
-     fight the host page's header or modals */
-  isolation: isolate;
+  isolation: isolate; /* internal z-indexes can't fight the host page */
 }
 
 .mfa-work__inner {
@@ -90,15 +64,12 @@
   gap: var(--mfa-gap);
 }
 
-/* ----- one card ----- */
 .mfa-work__card {
   position: relative;
   grid-column: span 1;
   aspect-ratio: var(--mfa-ratio);
   border-radius: var(--mfa-radius);
-  /* clips the still AND the cursor panel, which is what stops the panel
-     spilling onto a neighbouring card at the edges of its travel */
-  overflow: hidden;
+  overflow: hidden; /* clips the still and the panel at the card's edge */
 }
 
 .mfa-work__card--wide {
@@ -115,8 +86,6 @@
   cursor: pointer;
 }
 
-/* keyboard users get a focus ring instead of the panel — the panel is
-   cursor-driven and has nothing to track */
 .mfa-work__link:focus-visible {
   outline: 2px solid var(--mfa-ink);
   outline-offset: -4px;
@@ -129,11 +98,7 @@
   object-fit: cover;
 }
 
-/* The dimming sheet. As the link's ::before it sits above the still — which is
-   in flow, so it paints first — but below __mark, which is positioned and
-   comes later in the box order. That ordering is the whole reason it is
-   ::before and not ::after: the wordmark has its own fade and must not be
-   dimmed by this one on the way out. */
+/* ::before, not ::after, so it sits above the still but below the wordmark */
 .mfa-work__link::before {
   content: "";
   position: absolute;
@@ -144,7 +109,6 @@
   pointer-events: none;
 }
 
-/* ----- client wordmark ----- */
 .mfa-work__mark {
   position: absolute;
   left: 50%;
@@ -168,11 +132,7 @@
   height: var(--mfa-mark-size);
 }
 
-/* ----- the cursor panel -----
-   Parked at the card's centre. Everything below is its RESTING state: closed,
-   invisible, inert. main.js animates away from these values and back to them,
-   so on a touch device or under reduced motion — where main.js wires nothing
-   up — the panel simply never appears. */
+/* the cursor panel, parked at the card's centre — this is its resting state */
 .mfa-work__cursor {
   position: absolute;
   top: 50%;
@@ -183,8 +143,7 @@
   will-change: transform;
 }
 
-/* the window the label slides across — the label runs wider than the panel on
-   a long title and would otherwise stick out past the video's edge */
+/* the window a long label slides across */
 .mfa-work__label-clip {
   display: block;
   width: 100%;
@@ -205,16 +164,9 @@
   will-change: transform;
 }
 
-/* ----- the opening window -----
-   The video is revealed by SCALING this box, not by animating a clip-path on
-   it. The two look identical, because the video inside is scaled by exactly
-   the reciprocal at every step: the window grows, the picture inside it holds
-   still. The difference is what the browser has to do — a clip-path has to be
-   re-rasterised every frame, while a pair of transforms is handed to the
-   compositor and costs nothing per frame. That is what makes the open smooth.
-
-   Both halves are driven together by applyWindow() in main.js; the values
-   below are only the resting state it starts from. */
+/* The reveal scales up while the video scales by the reciprocal, so the frame
+   opens without the picture moving — cheaper than animating a clip-path.
+   applyWindow() in main.js drives both. */
 .mfa-work__reveal {
   width: 100%;
   aspect-ratio: var(--mfa-panel-ratio);
@@ -230,14 +182,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* the reciprocal — this is what keeps the frame from squashing with it */
   transform: scale(calc(1 / var(--mfa-panel-shut)));
   will-change: transform;
 }
 
-/* ----- hover -----
-   Behind a hover query so a touch tap — which browsers report as a hover that
-   then sticks — cannot leave a card dimmed with its wordmark gone. */
+/* behind a hover query so a touch tap can't leave a card stuck dimmed */
 @media (hover: hover) and (pointer: fine) {
   .mfa-work__card:hover .mfa-work__link::before {
     opacity: var(--mfa-dim);
@@ -248,9 +197,6 @@
   }
 }
 
-/* ----- narrow screens -----
-   One column, and the panel is gone: there is no cursor to follow, so it is
-   only a video the visitor never asked to download. */
 @media (max-width: 760px) {
   .mfa-work__grid {
     grid-template-columns: minmax(0, 1fr);
@@ -273,7 +219,6 @@
     transition-duration: 1ms;
   }
 
-  /* nothing drives it, so it should not be holding a compositor layer */
   .mfa-work__cursor {
     display: none;
   }
